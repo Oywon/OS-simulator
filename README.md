@@ -2,7 +2,7 @@
 
 Interactive web simulator for learning OS concepts including CPU scheduling, memory management, file systems, and disk operations.
 
-**🔗 [Live Demo](https://yourusername.github.io/os-simulator)**
+**🔗 [Live Demo]( https://oywon.github.io/OS-simulator/)**
 
 ## Features
 
