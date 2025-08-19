@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Internal Functionality Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🖥️ Operating System Internal Functionality Simulator</h1>
+        <p>Explore CPU Scheduling, Memory Management, File Systems, and Disk Operations</p>
+    </div>
+
+    <div class="nav-menu">
+        <div class="nav-item active" onclick="showSection('cpu')">CPU Scheduling</div>
+        <div class="nav-item" onclick="showSection('memory')">Memory Management</div>
+        <div class="nav-item" onclick="showSection('filesystem')">File System</div>
+        <div class="nav-item" onclick="showSection('disk')">Disk Management</div>
+        <div class="nav-item" onclick="showSection('performance')">Performance Monitor</div>
+    </div>
+
+    <div class="container">
+        <!-- CPU Scheduling Section -->
+        <div id="cpu-section" class="section active">
+            <div class="card">
+                <h2>🔄 CPU Process Scheduling Simulator</h2>
+                
+                <div class="process-form">
+                    <div class="form-group">
+                        <label>Process Name:</label>
+                        <input type="text" id="processName" placeholder="e.g., P1" value="P1">
+                        
+                        <label>Arrival Time:</label>
+                        <input type="number" id="arrivalTime" placeholder="0" value="0" min="0">
+                        
+                        <label>Burst Time:</label>
+                        <input type="number" id="burstTime" placeholder="10" value="10" min="1">
+                        
+                        <label>Priority:</label>
+                        <input type="number" id="priority" placeholder="1" value="1" min="1" max="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Scheduling Algorithm:</label>
+                        <select id="schedulingAlgorithm">
+                            <option value="fcfs">First Come First Served (FCFS)</option>
+                            <option value="sjf">Shortest Job First (SJF)</option>
+                            <option value="priority">Priority Scheduling</option>
+                            <option value="rr">Round Robin</option>
+                        </select>
+                        
+                        <label>Time Quantum:</label>
+                        <input type="number" id="timeQuantum" placeholder="4" value="4" min="1">
+                        
+                        <button class="btn" onclick="addProcess()">Add Process</button>
+                        <button class="btn success" onclick="runScheduler()">Run Scheduler</button>
+                        <button class="btn danger" onclick="clearProcesses()">Clear All</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Process Queue</h3>
+                        <table class="process-table" id="processTable">
+                            <thead>
+                                <tr>
+                                    <th>Process</th>
+                                    <th>Arrival</th>
+                                    <th>Burst</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="processTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h3>Execution Statistics</h3>
+                        <div class="memory-stats">
+                            <div class="stat-item">
+                                <span>Total Processes:</span>
+                                <span id="totalProcesses">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Average Waiting Time:</span>
+                                <span id="avgWaitingTime">0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Average Turnaround Time:</span>
+                                <span id="avgTurnaroundTime">0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>CPU Utilization:</span>
+                                <span id="cpuUtilization">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Gantt Chart</h3>
+                <div class="gantt-chart" id="ganttChart">
+                    <p style="text-align: center; color: #7f8c8d; margin-top: 80px;">Add processes and run scheduler to see the Gantt chart</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Management Section -->
+        <div id="memory-section" class="section">
+            <div class="card">
+                <h2>💾 Memory Management Simulator</h2>
+                
+                <div class="process-form">
+                    <div class="form-group">
+                        <label>Process Size (KB):</label>
+                        <input type="number" id="processSize" placeholder="100" value="100" min="1">
+                        
+                        <label>Allocation Algorithm:</label>
+                        <select id="allocationAlgorithm">
+                            <option value="first">First Fit</option>
+                            <option value="best">Best Fit</option>
+                            <option value="worst">Worst Fit</option>
+                        </select>
+                        
+                        <button class="btn" onclick="allocateMemory()">Allocate Memory</button>
+                        <button class="btn danger" onclick="deallocateMemory()">Deallocate All</button>
+                        <button class="btn" onclick="compactMemory()">Compact Memory</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Memory Layout (1024 KB Total)</h3>
+                        <div class="memory-visual" id="memoryVisual">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Memory Statistics</h3>
+                        <div class="memory-stats">
+                            <div class="stat-item">
+                                <span>Total Memory:</span>
+                                <span>1024 KB</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Used Memory:</span>
+                                <span id="usedMemory">128 KB</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Free Memory:</span>
+                                <span id="freeMemory">896 KB</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Fragmentation:</span>
+                                <span id="fragmentation">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Allocated Blocks:</span>
+                                <span id="allocatedBlocks">1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Free Blocks:</span>
+                                <span id="freeBlocks">1</span>
+                            </div>
+                        </div>
+
+                        <h3>Allocation History</h3>
+                        <div class="log-console" id="memoryLog">
+                            <div class="log-entry info">[INIT] Memory system initialized with 1024 KB</div>
+                            <div class="log-entry info">[OS] Reserved 128 KB for operating system</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File System Section -->
+        <div id="filesystem-section" class="section">
+            <div class="card">
+                <h2>📁 File System Simulator</h2>
+                
+                <div class="process-form">
+                    <div class="form-group">
+                        <label>File/Folder Name:</label>
+                        <input type="text" id="fileName" placeholder="document.txt">
+                        
+                        <label>Type:</label>
+                        <select id="fileType">
+                            <option value="file">File</option>
+                            <option value="folder">Folder</option>
+                        </select>
+                        
+                        <label>Size (KB):</label>
+                        <input type="number" id="fileSize" placeholder="10" value="10" min="1">
+                        
+                        <button class="btn" onclick="createFileOrFolder()">Create</button>
+                        <button class="btn danger" onclick="deleteSelected()">Delete Selected</button>
+                        <button class="btn" onclick="saveFileSystem()">Save to Database</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Directory Structure</h3>
+                        <div class="file-tree" id="fileTree">
+                            <div class="file-item folder" onclick="selectFile(this)">📁 root/</div>
+                            <div class="file-item folder indent-1" onclick="selectFile(this)">📁 Documents/</div>
+                            <div class="file-item file indent-2" onclick="selectFile(this)">📄 report.docx (25 KB)</div>
+                            <div class="file-item file indent-2" onclick="selectFile(this)">📄 notes.txt (5 KB)</div>
+                            <div class="file-item folder indent-1" onclick="selectFile(this)">📁 Pictures/</div>
+                            <div class="file-item file indent-2" onclick="selectFile(this)">🖼️ photo1.jpg (150 KB)</div>
+                            <div class="file-item folder indent-1" onclick="selectFile(this)">📁 System/</div>
+                            <div class="file-item file indent-2" onclick="selectFile(this)">⚙️ config.sys (2 KB)</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>File System Statistics</h3>
+                        <div class="memory-stats">
+                            <div class="stat-item">
+                                <span>Total Files:</span>
+                                <span id="totalFiles">4</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Total Folders:</span>
+                                <span id="totalFolders">4</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Used Space:</span>
+                                <span id="usedSpace">182 KB</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Free Space:</span>
+                                <span id="freeSpace">9.8 MB</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Selected Item:</span>
+                                <span id="selectedItem">None</span>
+                            </div>
+                        </div>
+
+                        <h3>File Operations Log</h3>
+                        <div class="log-console" id="fileLog">
+                            <div class="log-entry info">[INIT] File system mounted successfully</div>
+                            <div class="log-entry info">[LOAD] Loaded existing directory structure</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disk Management Section -->
+        <div id="disk-section" class="section">
+            <div class="card">
+                <h2>💿 Disk Management Simulator</h2>
+                
+                <div class="process-form">
+                    <div class="form-group">
+                        <label>Disk Request (Cylinder):</label>
+                        <input type="number" id="cylinderRequest" placeholder="50" value="50" min="0" max="199">
+                        
+                        <label>Scheduling Algorithm:</label>
+                        <select id="diskAlgorithm">
+                            <option value="fcfs">FCFS</option>
+                            <option value="scan">SCAN</option>
+                            <option value="cscan">C-SCAN</option>
+                            <option value="sstf">SSTF</option>
+                        </select>
+                        
+                        <button class="btn" onclick="addDiskRequest()">Add Request</button>
+                        <button class="btn success" onclick="processDiskRequests()">Process Requests</button>
+                        <button class="btn danger" onclick="clearDiskRequests()">Clear Queue</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Disk Visualization</h3>
+                        <div class="disk-visual" id="diskVisual" onclick="spinDisk()">
+                            <div class="disk-center">HD</div>
+                        </div>
+                        
+                        <div class="disk-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3498db;"></div>
+                                <span>System Files</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #e74c3c;"></div>
+                                <span>User Data</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #f39c12;"></div>
+                                <span>Free Space</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #27ae60;"></div>
+                                <span>Cache</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Disk Request Queue</h3>
+                        <table class="process-table" id="diskRequestTable">
+                            <thead>
+                                <tr>
+                                    <th>Request #</th>
+                                    <th>Cylinder</th>
+                                    <th>Status</th>
+                                    <th>Seek Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diskRequestBody">
+                            </tbody>
+                        </table>
+
+                        <div class="memory-stats" style="margin-top: 20px;">
+                            <div class="stat-item">
+                                <span>Current Head Position:</span>
+                                <span id="headPosition">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Total Seek Distance:</span>
+                                <span id="totalSeekDistance">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Average Seek Time:</span>
+                                <span id="avgSeekTime">0.00 ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Requests in Queue:</span>
+                                <span id="requestsInQueue">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Monitor Section -->
+        <div id="performance-section" class="section">
+            <div class="card">
+                <h2>📊 System Performance Monitor</h2>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <svg class="progress-ring" width="100" height="100">
+                            <circle class="background" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"></circle>
+                            <circle class="progress" id="cpuProgress" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="200"></circle>
+                        </svg>
+                        <div class="metric-value" id="cpuMetric">25%</div>
+                        <div class="metric-label">CPU Usage</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <svg class="progress-ring" width="100" height="100">
+                            <circle class="background" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"></circle>
+                            <circle class="progress" id="memoryProgress" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="150"></circle>
+                        </svg>
+                        <div class="metric-value" id="memoryMetric">43%</div>
+                        <div class="metric-label">Memory Usage</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <svg class="progress-ring" width="100" height="100">
+                            <circle class="background" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"></circle>
+                            <circle class="progress" id="diskProgress" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="180"></circle>
+                        </svg>
+                        <div class="metric-value" id="diskMetric">32%</div>
+                        <div class="metric-label">Disk Usage</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <svg class="progress-ring" width="100" height="100">
+                            <circle class="background" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"></circle>
+                            <circle class="progress" id="networkProgress" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="220"></circle>
+                        </svg>
+                        <div class="metric-value" id="networkMetric">15%</div>
+                        <div class="metric-label">Network Usage</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 30px;">
+                    <div>
+                        <h3>CPU Performance</h3>
+                        <div class="performance-chart" id="cpuChart">
+                            <div class="chart-line" id="cpuChartLine"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Memory Performance</h3>
+                        <div class="performance-chart" id="memoryChart">
+                            <div class="chart-line" id="memoryChartLine"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-stats" style="margin-top: 20px;">
+                    <div class="stat-item">
+                        <span>System Uptime:</span>
+                        <span id="systemUptime">2h 34m 18s</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Active Processes:</span>
+                        <span id="activeProcesses">47</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Total Memory:</span>
+                        <span>8.00 GB</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Available Memory:</span>
+                        <span id="availableMemory">4.56 GB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
